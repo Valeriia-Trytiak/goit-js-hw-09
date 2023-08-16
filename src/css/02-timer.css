@@ -1,0 +1,19 @@
+.timer {
+  display: flex;
+  gap: 30px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+}
+
+.field :first-child {
+  font-size: 45;
+  color: red;
+}
+
+.field :last-child {
+  font-size: 20;
+  text-transform: uppercase;
+}
