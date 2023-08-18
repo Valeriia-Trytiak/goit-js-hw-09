@@ -14,10 +14,12 @@ function onClickStart() {
     elements.body.style.backgroundColor = getRandomHexColor();
   }, 1000);
   elements.start.disabled = true;
+  elements.stop.disabled = false;
 }
 
 function onClickStop() {
   clearInterval(timerId);
+  elements.stop.disabled = true;
   elements.start.disabled = false;
 }
 
