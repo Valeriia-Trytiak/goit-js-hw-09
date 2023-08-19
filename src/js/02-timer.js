@@ -1,18 +1,28 @@
+//підключення бібліотек
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
+//розштрення опцій бібліотеки flatpickr та Notiflix, слухач подій на кпонку старт
 const options = {
   enableTime: true,
   time_24hr: true,
   defaultDate: new Date(),
   minuteIncrement: 1,
   onClose(selectedDates) {
-    console.log(selectedDates[0]);
+    if (selectedDates[0].getTime() <= Date.now()) {
+      Notify.failure('Please choose a date in the future');
+    } else {
+      elements.btnStart.disabled = false;
+      elements.btnStart.addEventListener('click', onClickBtnStart);
+    }
   },
 };
 
+//ініціалізація бібліотеки
 flatpickr('#datetime-picker', options);
 
+//збираю елементи html-розмітки
 const elements = {
   input: document.querySelector('#datetime-picker'),
   btnStart: document.querySelector('[data-start]'),
@@ -22,23 +32,36 @@ const elements = {
   seconds: document.querySelector('[data-seconds]'),
 };
 
+//кнопка старт не активна до вибору валідної дати
 elements.btnStart.disabled = true;
 
-elements.input.addEventListener('input', onInput);
-elements.btnStart.addEventListener('click', onClickBtnStart);
+//функція на кліку розраховує різницу у обраному часі та підставляє відповідні значення на сторінку таймера
+function onClickBtnStart() {
+  const finalDate = Date.parse(elements.input.value);
 
-function onInput(evt) {
-  const finalDate = Date.parse(evt.target.value);
+  const timerId = setInterval(() => {
+    const differenceTime = finalDate - Date.now();
+    const parameters = convertMs(differenceTime);
 
-  if (finalDate <= new Date().getTime()) {
-    window.alert('Please choose a date in the future');
-  }
-  elements.btnStart.disabled = false;
-  return finalDate;
+    elements.days.textContent = addLeadingZero(parameters.days);
+    elements.hours.textContent = addLeadingZero(parameters.hours);
+    elements.minutes.textContent = addLeadingZero(parameters.minutes);
+    elements.seconds.textContent = addLeadingZero(parameters.seconds);
+
+    if (differenceTime < 0) {
+      clearInterval(timerId);
+      elements.days.textContent = '00';
+      elements.hours.textContent = '00';
+      elements.minutes.textContent = '00';
+      elements.seconds.textContent = '00';
+    }
+    return;
+  }, 1000);
 }
 
-function onClickBtnStart() {
-  setInterval(convertMs(), 1000);
+// преведення числа до необхідного формату у таймер
+function addLeadingZero(value) {
+  return value.toString().padStart(2, '0');
 }
 
 function convertMs(ms) {
