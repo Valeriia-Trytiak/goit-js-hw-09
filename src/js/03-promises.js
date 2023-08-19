@@ -9,7 +9,13 @@ formEl.addEventListener('submit', onSubmitBtn);
 //функція забирає значення з інпутів введення данних
 function onSubmitBtn(evt) {
   evt.preventDefault();
+
   const { delay, step, amount } = evt.currentTarget.elements;
+
+  if (delay.value <= 0 || step.value <= 0 || amount.value <= 0) {
+    Notify.failure(`😡 Please enter a number greater than 0`);
+    evt.target.reset();
+  }
 
   let delayTimeInput = Number(delay.value);
   let stepTimeInput = Number(step.value);
@@ -28,7 +34,6 @@ function onSubmitBtn(evt) {
         Notify.failure(`❌ Rejected promise ${position} in ${delay}ms`);
       });
   }
-  // evt.target.reset();
 }
 
 function createPromise(position, delay) {
