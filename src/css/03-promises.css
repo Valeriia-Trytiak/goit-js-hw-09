@@ -1,12 +1,9 @@
 button {
-  display: block;
-  margin: 30 auto;
-  padding: 8px 16px;
-
+  margin-left: 10px;
   min-width: 100px;
+  min-height: 30px;
   font-family: inherit;
   appearance: none;
-
   border: 0;
   border-radius: 5px;
   background: #4676d7;
@@ -23,8 +20,16 @@ button:focus {
   box-shadow: 0 0 0 4px #cbd6ee;
 }
 
-button[disabled] {
-  color: #d2d5db;
-  background: #6c7589;
-  cursor: not-allowed;
+input {
+  min-width: 100px;
+  min-height: 25px;
+  border-radius: 5px;
+  box-shadow: 0 0 0 4px #cbd6ee;
+  margin-left: 10px;
+}
+
+label {
+  font-size: 15px;
+  line-height: 13px;
+  font-weight: 600;
 }
